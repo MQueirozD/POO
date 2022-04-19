@@ -15,9 +15,9 @@ public class PessoaFisica extends Pessoa{
         this.cpf = cpf;
     }
     
+    @Override
     public String imprimir(){
-        return "Nome: " + nome + "\nCPF: " + cpf +
-                "\nEmail: " + getEmail() + "\nCelular: " + getCelular();
+        return "Nome: " + nome + "\nCPF: " + cpf +"\n" + super.imprimir();
     }
 
     public String getNome() {

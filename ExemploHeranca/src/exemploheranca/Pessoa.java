@@ -1,33 +1,25 @@
 
 package exemploheranca;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pessoa {
     private String email;
     private String celular;
-
-    public Pessoa() {
+  
+    public String imprimir(){
+        return "Email: " + email + "\nCelular: " + celular;
     }
 
-    public Pessoa(String email, String celular) {
-        this.email = email;
-        this.celular = celular;
-    }
-
-    public String getCelular() {
-        return celular;
-    }
-
-    public void setCelular(String celular) {
-        this.celular = celular;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  
     
     
+
 }

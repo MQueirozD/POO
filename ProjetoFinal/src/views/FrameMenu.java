@@ -4,9 +4,12 @@
  */
 package views;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 /**
@@ -247,6 +250,9 @@ public class FrameMenu extends javax.swing.JFrame {
                     break;
                 }
             }
+            FlatLightLaf.setup();
+            UIManager.put( "Button.arc", 10 );
+          
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(FrameMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {

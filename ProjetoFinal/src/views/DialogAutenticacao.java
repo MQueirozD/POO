@@ -4,6 +4,7 @@
  */
 package views;
 
+import dao.UsuarioDAO;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
@@ -14,18 +15,16 @@ import javax.swing.JOptionPane;
  */
 public class DialogAutenticacao extends javax.swing.JDialog {
     private boolean autenticado;
+    private UsuarioDAO usuarioDAO;
     
     public boolean getAutenticado(){
         return autenticado;
     }
     
-    /**
-     * Creates new form DialogAutenticacao
-     */
     public DialogAutenticacao(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+        usuarioDAO = new UsuarioDAO();
          this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -56,6 +55,7 @@ public class DialogAutenticacao extends javax.swing.JDialog {
         textSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(".: Projeto Final - Autenticação :.");
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Sem título.jpg"))); // NOI18N
 
@@ -155,6 +155,7 @@ public class DialogAutenticacao extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelarActionPerformed
@@ -164,7 +165,7 @@ public class DialogAutenticacao extends javax.swing.JDialog {
 
     private void buttonEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEntrarActionPerformed
         // TODO add your handling code here:
-        if(textUsuario.getText().equals("rafael")){
+        if(usuarioDAO.autenticar(textUsuario.getText(), textSenha.getText())){
             autenticado = true;
             dispose();
         }else{

@@ -1,0 +1,60 @@
+<!-- Synth skin that includes an image for buttons -->
+<synth>
+    <!-- Style that all regions will use -->
+    <style id="backingStyle">
+        <!-- Make all the regions that use this skin opaque-->
+        <opaque value="TRUE"/>
+        <font name="Dialog" size="12"/>
+        <state>
+            <!-- Provide default colors -->
+            <color value="#9BC3B1" type="BACKGROUND"/>
+            <color value="BLUE" type="FOREGROUND"/>
+        </state>
+    </style>
+    <style id="buttonStyle">
+        <!-- Shift the text one pixel when pressed -->
+        <property key="Button.textShiftOffset" type="integer" value="1"/>
+        <insets top="15" left="20" right="20" bottom="15"/>
+        <state>
+            <imagePainter method="buttonBackground" path="/images/button.png"
+                          sourceInsets="0 0 0 0"/>
+        </state>
+        <state value="PRESSED">
+            <imagePainter method="buttonBackground" path="/images/button2.png"
+                          sourceInsets="0 0 0 0"/>
+
+        </state>
+    </style>
+    <style id="panelStyle">
+        
+        <state>
+            <opaque value="true" />
+            <imagePainter method="panelBackground" path="/images/back.jpg"
+                          sourceInsets="0 0 0 0"/>
+        </state>    
+    </style>
+    <style id="textfield">
+        <insets top="4" left="10" bottom="4" right="10"/>
+        <state>
+            <font name="Verdana" size="14"/>
+            <color value="#D2DFF2" type="BACKGROUND"/>
+            <color value="#000000" type="TEXT_FOREGROUND"/>
+        </state>
+        <imagePainter method="textFieldBorder" path="/images/textfield.png" sourceInsets="30 5 30 5" paintCenter="false"/>
+    </style>
+     <style id="label">
+        <insets top="4" left="10" bottom="4" right="10"/>
+        <state>
+            <font name="Verdana" size="14"/>
+            
+        </state>
+    </style>
+    <!-- Bind buttonStyle to all JButtons -->
+    <bind style="buttonStyle" type="region" key="button"/> 
+    <bind style="backingStyle" type="region" key=".*"/>
+    <bind style="panelStyle" type="name" key="panel1"/> 
+        <bind style="textfield" type="region" key="TextField"/>
+        <bind style="label" type="region" key="Label"/>
+
+
+</synth>

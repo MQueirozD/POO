@@ -38,7 +38,8 @@ public class FrameMenu extends javax.swing.JFrame {
         
         ProdutoDAO pDAO = new ProdutoDAO();
         Produto p = new Produto(0, "Produto 1", 2, 45.50);
-        
+        p.setCategoriaProduto(cDAO.selecionarPorId(1));
+        pDAO.inserir(p);
     }
 
     /**

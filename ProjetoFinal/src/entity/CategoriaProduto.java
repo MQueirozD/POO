@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,6 +22,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tab_categoria_produto")
+@NamedQueries({
+    @NamedQuery(name = "CategoriaProduto.findAll", query = "SELECT c FROM CategoriaProduto c"),
+    @NamedQuery(name = "CategoriaProduto.findById", 
+                            query = "SELECT c FROM CategoriaProduto c WHERE c.id = :codigo")
+})
 public class CategoriaProduto implements Serializable {
 
     private static final long serialVersionUID = 1L;

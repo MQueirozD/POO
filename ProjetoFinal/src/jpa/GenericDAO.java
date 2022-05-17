@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dao;
+package jpa;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -82,8 +82,8 @@ public class GenericDAO<T> {
                 .getResultList();
     }
 
-    public T selecionarPorCodigo(long codigo) {
-        return (T) getEntityManager().createNamedQuery(persistentClass.getSimpleName() + ".findByCodigo")
+    public T selecionarPorId(int codigo) {
+        return (T) getEntityManager().createNamedQuery(persistentClass.getSimpleName() + ".findById")
                 .setParameter("codigo", codigo)
                 .getSingleResult();
     }

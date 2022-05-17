@@ -6,11 +6,15 @@ package views;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import entity.CategoriaProduto;
+import entity.Produto;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import jpa.CategoriaProdutoDAO;
+import jpa.ProdutoDAO;
 
 /**
  *
@@ -27,6 +31,14 @@ public class FrameMenu extends javax.swing.JFrame {
         
         if(telaLogin.getAutenticado())
             initComponents();
+        
+        CategoriaProdutoDAO cDAO = new CategoriaProdutoDAO();
+        cDAO.inserir(new CategoriaProduto(0,"Categoria 1"));
+        cDAO.inserir(new CategoriaProduto(0,"Categoria 2"));
+        
+        ProdutoDAO pDAO = new ProdutoDAO();
+        Produto p = new Produto(0, "Produto 1", 2, 45.50);
+        
     }
 
     /**

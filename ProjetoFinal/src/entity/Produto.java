@@ -44,6 +44,14 @@ public class Produto implements Serializable {
     public Produto() {
     }
 
+    public CategoriaProduto getCategoriaProduto() {
+        return categoriaProduto;
+    }
+
+    public void setCategoriaProduto(CategoriaProduto categoriaProduto) {
+        this.categoriaProduto = categoriaProduto;
+    }
+
     public String getNome() {
         return nome;
     }

@@ -55,7 +55,7 @@ public class DialogAutenticacao extends javax.swing.JDialog {
         textSenha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(".: Projeto Final - Autenticação :.");
+        setTitle(".:: Projeto Final - Autenticação ::.");
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Sem título.jpg"))); // NOI18N
 

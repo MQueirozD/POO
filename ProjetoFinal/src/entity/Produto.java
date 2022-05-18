@@ -14,12 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  *
  * @author rafae
  */
 @Entity
+@Table(name="tab_produto")
 @NamedQueries({
     @NamedQuery(name = "Produto.findAll", query = "SELECT c FROM Produto c"),
     @NamedQuery(name = "Produto.findById", query = "SELECT c FROM Produto c WHERE c.id = :codigo")
@@ -29,9 +31,12 @@ public class Produto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int id;
-    @Column(length = 300, nullable = false)
+    @Column(length = 300, nullable = false, name = "nome")
     private String nome;
+        @Column(name = "quantidade")
+
     private int quantidade;
     @Column(name = "valor_unitario")
     private double valorUnitario; 

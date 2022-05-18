@@ -20,13 +20,14 @@ import javax.persistence.Table;
  *
  * @author rafae
  */
-@Entity
-@Table(name = "tab_categoria_produto")
+
 @NamedQueries({
     @NamedQuery(name = "CategoriaProduto.findAll", query = "SELECT c FROM CategoriaProduto c"),
     @NamedQuery(name = "CategoriaProduto.findById", 
                             query = "SELECT c FROM CategoriaProduto c WHERE c.id = :codigo")
 })
+@Entity
+@Table(name = "tab_categoria_produto")
 public class CategoriaProduto implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -31,15 +31,8 @@ public class FrameMenu extends javax.swing.JFrame {
         
         if(telaLogin.getAutenticado())
             initComponents();
+
         
-        CategoriaProdutoDAO cDAO = new CategoriaProdutoDAO();
-        cDAO.inserir(new CategoriaProduto(0,"Categoria 1"));
-        cDAO.inserir(new CategoriaProduto(0,"Categoria 2"));
-        
-        ProdutoDAO pDAO = new ProdutoDAO();
-        Produto p = new Produto(0, "Produto 1", 2, 45.50);
-        p.setCategoriaProduto(cDAO.selecionarPorId(1));
-        pDAO.inserir(p);
     }
 
     /**

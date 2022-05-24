@@ -17,14 +17,18 @@ import utils.TableModelCreator;
  * @author rafae
  */
 public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
-   private static InternalConsultaCategoria instance;
-    
-    public static InternalConsultaCategoria getInstance(){
-        if(instance == null)
+
+    private static InternalConsultaCategoria instance;
+    private Integer idSelecionado;
+
+    public static InternalConsultaCategoria getInstance() {
+        if (instance == null) {
             instance = new InternalConsultaCategoria();
-        
+        }
+
         return instance;
     }
+
     /**
      * Creates new form InternalConsultaCategoria
      */
@@ -71,14 +75,29 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
         });
 
         btnAdicionar.setText("Adicionar");
+        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
         btnEditar.setEnabled(false);
         btnEditar.setMaximumSize(new java.awt.Dimension(77, 23));
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setText("Excluir");
         btnExcluir.setEnabled(false);
         btnExcluir.setMinimumSize(new java.awt.Dimension(77, 23));
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -136,25 +155,56 @@ public class InternalConsultaCategoria extends javax.swing.JInternalFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
-           JTable source = (JTable)evt.getSource();
-            int row = source.rowAtPoint( evt.getPoint() );
-            int column = jTable1.convertColumnIndexToView
-                                        (jTable1.getColumn("Id ").getModelIndex());         
-            
-            String s=source.getModel().getValueAt(row, column)+"";
-            JOptionPane.showMessageDialog(null, s);
-            btnEditar.setEnabled(true);
-            btnExcluir.setEnabled(true);
+        JTable source = (JTable) evt.getSource();
+        int row = source.rowAtPoint(evt.getPoint());
+        int column = jTable1.convertColumnIndexToView(jTable1.getColumn("Id ").getModelIndex());
+
+        String s = source.getModel().getValueAt(row, column) + "";
+        idSelecionado = Integer.parseInt(s);
+        btnEditar.setEnabled(true);
+        btnExcluir.setEnabled(true);
     }//GEN-LAST:event_jTable1MouseClicked
-    public void atualizaTabela(){
-        try{
-            List<CategoriaProduto> categorias = new CategoriaProdutoDAO().selecionarTodos();
-            TableModel model = TableModelCreator.createTableModel(
-                                                    CategoriaProduto.class,categorias,null);
-            jTable1.setModel(model);
+
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        // TODO add your handling code here:
+        DialogCadastroCategoria c = new DialogCadastroCategoria(null, true, null);
+        c.setVisible(true);
+        atualizaTabela();
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        DialogCadastroCategoria c = new DialogCadastroCategoria(null, true, idSelecionado);
+        c.setVisible(true);
+        atualizaTabela();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (JOptionPane.showConfirmDialog(this, "Deseja excluir esse item?", "Atenção",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                CategoriaProdutoDAO cDAO = new CategoriaProdutoDAO();
+                CategoriaProduto c = cDAO.selecionarPorId(idSelecionado);
+                cDAO.excluir(c);
+                JOptionPane.showMessageDialog(this, "Excluído com sucesso", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                atualizaTabela();
+            }
         }
         catch(Exception ex){
-            
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(),"Exclusão",
+                                                                JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+    public void atualizaTabela() {
+        try {
+            List<CategoriaProduto> categorias = new CategoriaProdutoDAO().selecionarTodos();
+            TableModel model = TableModelCreator.createTableModel(
+                    CategoriaProduto.class, categorias, null);
+            jTable1.setModel(model);
+        } catch (Exception ex) {
+
         }
     }
 

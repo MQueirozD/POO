@@ -6,15 +6,32 @@ package views;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.itextpdf.kernel.events.PdfDocumentEvent;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.pdfa.PdfADocument;
 import entity.CategoriaProduto;
 import entity.Produto;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import jpa.CategoriaProdutoDAO;
 import jpa.ProdutoDAO;
+import reports.Footer;
+import reports.Header;
+import reports.ListagemCategoria;
 
 /**
  *
@@ -28,11 +45,11 @@ public class FrameMenu extends javax.swing.JFrame {
     public FrameMenu() {
         DialogAutenticacao telaLogin = new DialogAutenticacao(this, true);
         telaLogin.setVisible(true);
-        
-        if(telaLogin.getAutenticado())
-            initComponents();
 
-        
+        if (telaLogin.getAutenticado()) {
+            initComponents();
+        }
+
     }
 
     /**
@@ -58,6 +75,7 @@ public class FrameMenu extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem8 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -145,6 +163,15 @@ public class FrameMenu extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Relatórios");
+
+        jMenuItem8.setText("Listagem de Categorias");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem8);
+
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Sobre");
@@ -184,7 +211,7 @@ public class FrameMenu extends javax.swing.JFrame {
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
         // TODO add your handling code here:
-        if(evt.isPopupTrigger())
+        if (evt.isPopupTrigger())
             jPopupMenu1.show(this, evt.getX(), evt.getY());
     }//GEN-LAST:event_formMouseReleased
 
@@ -195,18 +222,17 @@ public class FrameMenu extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
-        WindowEvent winClEvent = new  WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        WindowEvent winClEvent = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(winClEvent);
 
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        if(JOptionPane.showConfirmDialog(this, "Deseja realmente sair?"
-                ,"Atenção",JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION){
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente sair?",
+                 "Atenção", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
             setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        }
-        else{
+        } else {
             setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         }
     }//GEN-LAST:event_formWindowClosing
@@ -215,30 +241,66 @@ public class FrameMenu extends javax.swing.JFrame {
         // TODO add your handling code here:
         InternalConsultaCategoria tela = InternalConsultaCategoria.getInstance();
         tela.pack();
-        if(!tela.isVisible()){
+        if (!tela.isVisible()) {
             jDesktopPane1.add(tela);
             tela.setVisible(true);
-        }
-        else
-        {
+        } else {
             tela.moveToFront();
         }
-                
+
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
         InternalConsultaProduto tela = InternalConsultaProduto.getInstance();
         tela.pack();
-        if(!tela.isVisible()){
+        if (!tela.isVisible()) {
             jDesktopPane1.add(tela);
             tela.setVisible(true);
-        }
-        else
-        {
+        } else {
             tela.moveToFront();
         }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        //Escolher onde salvar o PDF
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.showSaveDialog(this);
+        if (chooser.getSelectedFile() != null) {
+            String pasta = chooser.getSelectedFile().getPath();
+            String caminhoArquivo = pasta+ "/categorias.pdf";
+            try{
+                PdfWriter writer = new PdfWriter(caminhoArquivo);
+                PdfDocument pdf =new PdfDocument(writer);
+                pdf.setTagged();
+                pdf.setDefaultPageSize(PageSize.A4);
+                Document doc = new Document(pdf);
+                
+                //gerar cabecalho
+                //doc = ListagemCategoria.gerarCabecalhoTemporario(doc);
+                doc.setMargins(110, 36, 55, 36);
+                Header header = new Header("Listagem de Categorias");
+                Footer footer = new Footer();
+                pdf.addEventHandler(PdfDocumentEvent.START_PAGE, header);
+                pdf.addEventHandler(PdfDocumentEvent.END_PAGE,footer);
+                
+                //gerar tabela
+                List<CategoriaProduto> categs = new CategoriaProdutoDAO().selecionarTodos();
+                doc = ListagemCategoria.gerarTabela(doc,categs);
+                footer.writeTotal(pdf);
+                doc.close();
+                
+                File file = new File(caminhoArquivo);
+                Desktop.getDesktop().open(file);
+            }
+            catch(FileNotFoundException ex){
+                
+            } catch (Exception ex) {
+                Logger.getLogger(FrameMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,8 +319,8 @@ public class FrameMenu extends javax.swing.JFrame {
                 }
             }
             FlatLightLaf.setup();
-            UIManager.put( "Button.arc", 10 );
-          
+            UIManager.put("Button.arc", 10);
+
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(FrameMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -294,6 +356,7 @@ public class FrameMenu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
